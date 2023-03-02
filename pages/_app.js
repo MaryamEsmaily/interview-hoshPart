@@ -1,8 +1,6 @@
 import reactQueryConfig from "@/config/reactQuery.config";
-import { RtlProvider } from "@/provider/RtlProvider";
+import GlobalThemeProvider from "@/provider/GlobalThemeProvider";
 import "@/styles/globals.css";
-import theme from "@/theme/theme";
-import { ChakraProvider } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ToastContainer } from "react-toastify";
 
@@ -13,7 +11,7 @@ export const queryClient = new QueryClient({
 });
 
 export default function App(props) {
-  const { Component, pageProps, token } = props;
+  const { Component, pageProps } = props;
   const getLayout = Component.getLayout || ((page) => page);
   return (
     <QueryClientProvider client={queryClient}>
@@ -29,9 +27,13 @@ export default function App(props) {
         rtl={true}
         style={{ margin: "10px", maxWidth: "300px" }}
       />
-      <ChakraProvider resetCSS theme={theme}>
-        <RtlProvider>{getLayout(<Component {...pageProps} />)}</RtlProvider>
-      </ChakraProvider>
+      <GlobalThemeProvider>
+        {({ _dir }) => (
+          <>
+            <>{getLayout(<Component {...pageProps} />)}</>
+          </>
+        )}
+      </GlobalThemeProvider>
     </QueryClientProvider>
   );
 }
