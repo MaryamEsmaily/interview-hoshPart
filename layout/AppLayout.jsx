@@ -14,7 +14,7 @@ import {
 import Image from "next/image";
 import React from "react";
 
-function AppLayout({ showSearch }) {
+function AppLayout({ showSearch, children }) {
   const { colorMode, toggleColorMode } = useColorMode();
   const isDark = colorMode === "dark";
   return (
@@ -75,6 +75,7 @@ function AppLayout({ showSearch }) {
           </Flex>
         </Stack>
       </Flex>
+      {children}
     </Box>
   );
 }
