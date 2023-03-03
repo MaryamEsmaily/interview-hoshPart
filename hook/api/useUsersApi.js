@@ -20,4 +20,22 @@ const useGetUser = (params) => {
   });
 };
 
-export { useGetUsers, usePostUser, useGetUser };
+const usePutUser = () => {
+  const queryClient = useQueryClient();
+  return useMutation(apiUsers.putUser, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("getUser");
+    },
+  });
+};
+
+const useDeleteUser = () => {
+  const queryClient = useQueryClient();
+  return useMutation(apiUsers.deleteUser, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("getUsers");
+    },
+  });
+};
+
+export { useGetUsers, usePostUser, useGetUser, usePutUser, useDeleteUser };

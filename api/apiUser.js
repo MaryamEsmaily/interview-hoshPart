@@ -19,4 +19,14 @@ const getUser = async ({ queryKey }) => {
   return data;
 };
 
-export { getUsers, postUser, getUser };
+const putUser = async (params) => {
+  const { data } = await instance.put(`${BASE_URL}/${params.id}`, params);
+  return data;
+};
+
+const deleteUser = async (params) => {
+  const { data } = await instance.delete(`${BASE_URL}/${params}`);
+  return data;
+};
+
+export { getUsers, postUser, getUser, putUser, deleteUser };

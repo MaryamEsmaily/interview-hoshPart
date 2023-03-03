@@ -17,6 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import React, { useRef } from "react";
 import { toast } from "react-toastify";
 
@@ -35,23 +36,23 @@ const initialValues = {
 
 function AddUserModal({ onClose }) {
   //
+  const { push } = useRouter();
+  //
   const refInputUpload = useRef();
   //
   const postUser = usePostUser();
   //
   const handleSubmit = (values) => {
-    postUser.mutate(
-      { ...values, avatar: values.avatar.split(",")?.[1] },
-      {
-        onSuccess: (res) => {
-          toast.success("با موفقیت اضافه شد");
-          onClose();
-        },
-        onError: (err) => {
-          toast.error("خطایی رخ داده است");
-        },
-      }
-    );
+    postUser.mutate(values, {
+      onSuccess: (res) => {
+        toast.success("با موفقیت اضافه شد");
+        onClose();
+        push(`/edit-user/${res.id}`);
+      },
+      onError: (err) => {
+        toast.error("خطایی رخ داده است");
+      },
+    });
   };
   //
   const formik = useFormik({

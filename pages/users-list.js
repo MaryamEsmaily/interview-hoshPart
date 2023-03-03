@@ -10,9 +10,13 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import React, { useMemo } from "react";
 
 function UsersListPage() {
+  //
+  const { push } = useRouter();
+  //
   const { isOpen, onOpen, onClose } = useDisclosure();
   //
   const { data: users } = useGetUsers();
@@ -24,6 +28,17 @@ function UsersListPage() {
       {
         Header: "نام کاربر",
         accessor: "name",
+        Cell: ({ value, row }) => {
+          return (
+            <Text
+              onClick={() => push(`/edit-user/${row.original.id}`)}
+              cursor="pointer"
+              _hover={{ textDecoration: "underline" }}
+            >
+              {value ? value : "-"}
+            </Text>
+          );
+        },
       },
       {
         Header: "سن",

@@ -1,6 +1,7 @@
 import CloseIcon from "@/components/icon/CloseIcon";
-import { useGetUser } from "@/hook/api/useUsersApi";
+import { useDeleteUser, useGetUser, usePutUser } from "@/hook/api/useUsersApi";
 import AppLayout from "@/layout/AppLayout";
+import getBase64Format from "@/utils/getBase64Format";
 import getInitialValuesFormik from "@/utils/getInitialValuesFormik";
 import {
   Box,
@@ -17,8 +18,10 @@ import { useFormik } from "formik";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useMemo, useRef } from "react";
+import { toast } from "react-toastify";
 
 const initialValues = {
+  id: "",
   avatar: "",
   city: "",
   company: "",
@@ -35,24 +38,37 @@ function EditUserPage() {
   //
   const refInputUpload = useRef();
   //
-  const { query } = useRouter();
+  const { query, push } = useRouter();
   const { id } = query;
   //
   const { data } = useGetUser(id);
+  const putUser = usePutUser();
+  const deleteUser = useDeleteUser();
+  //
+  const handleDeleteUser = () => {
+    deleteUser.mutate(id, {
+      onSuccess: (res) => {
+        toast.success("با موفقیت حذف شد");
+        push("/users-list");
+      },
+      onError: (err) => {
+        toast.error("خطایی رخ داده است");
+      },
+    });
+  };
   //
   const handleSubmit = (values) => {
-    // postUser.mutate(
-    //   { ...values, avatar: values.avatar.split(",")?.[1] },
-    //   {
-    //     onSuccess: (res) => {
-    //       toast.success("با موفقیت اضافه شد");
-    //       onClose();
-    //     },
-    //     onError: (err) => {
-    //       toast.error("خطایی رخ داده است");
-    //     },
-    //   }
-    // );
+    putUser.mutate(
+      { ...values, id },
+      {
+        onSuccess: (res) => {
+          toast.success("با موفقیت ویرایش شد");
+        },
+        onError: (err) => {
+          toast.error("خطایی رخ داده است");
+        },
+      }
+    );
   };
   //
   const memoizedInitialValues = useMemo(
@@ -73,7 +89,13 @@ function EditUserPage() {
   return (
     <>
       <Text mt={6}>لیست کاربران</Text>
-      <Flex as="form" width="100%" align="center" justify="center">
+      <Flex
+        as="form"
+        onSubmit={formik.handleSubmit}
+        width="100%"
+        align="center"
+        justify="center"
+      >
         <Box
           w="100%"
           maxW="450px"
@@ -148,7 +170,7 @@ function EditUserPage() {
               </Box>
             )}
           </Flex>
-          <Stack spacing={8} onSubmit={formik.handleSubmit}>
+          <Stack spacing={8}>
             <Stack direction="row">
               <FormControl>
                 <FormLabel fontSize="xs">نام کاربر</FormLabel>
@@ -245,7 +267,7 @@ function EditUserPage() {
                 rounded="xl"
                 width="full"
                 colorScheme="red"
-                onClick={() => {}}
+                onClick={handleDeleteUser}
               >
                 حذف
               </Button>
