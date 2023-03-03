@@ -1,8 +1,17 @@
 import * as apiUsers from "@/api/apiUser";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 //
 const useGetUsers = () => {
   return useQuery(["getUsers"], apiUsers.getUsers);
 };
 
-export { useGetUsers };
+const usePostUser = () => {
+  const queryClient = useQueryClient();
+  return useMutation(apiUsers.postUser, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("getUsers");
+    },
+  });
+};
+
+export { useGetUsers, usePostUser };

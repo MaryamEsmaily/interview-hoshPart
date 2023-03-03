@@ -1,10 +1,20 @@
 import CustomTable from "@/components/custom/Table";
+import AddUserModal from "@/components/modal/AddUserModal";
 import { useGetUsers } from "@/hook/api/useUsersApi";
 import AppLayout from "@/layout/AppLayout";
-import { Box, Button, Stack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Modal,
+  Stack,
+  Text,
+  useDisclosure,
+} from "@chakra-ui/react";
 import React, { useMemo } from "react";
 
 function UsersListPage() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  //
   const { data: users } = useGetUsers();
   //
   const data = useMemo(() => users ?? [], [users]);
@@ -48,13 +58,18 @@ function UsersListPage() {
   );
   //
   return (
-    <Box mt={10}>
-      <Stack direction="row" align="center" justifyContent="space-between">
-        <Text>لیست کاربران</Text>
-        <Button>کاربر جدید</Button>
-      </Stack>
-      <CustomTable columns={columns} data={data} />
-    </Box>
+    <>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <AddUserModal onClose={onClose} />
+      </Modal>
+      <Box mt={10}>
+        <Stack direction="row" align="center" justifyContent="space-between">
+          <Text>لیست کاربران</Text>
+          <Button onClick={onOpen}>کاربر جدید</Button>
+        </Stack>
+        <CustomTable columns={columns} data={data} />
+      </Box>
+    </>
   );
 }
 

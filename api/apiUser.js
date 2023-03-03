@@ -8,4 +8,9 @@ const getUsers = async () => {
   return data;
 };
 
-export { getUsers };
+const postUser = async (params) => {
+  const { data } = await instance.post(BASE_URL, params);
+  return data;
+};
+
+export { getUsers, postUser };

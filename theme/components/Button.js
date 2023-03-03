@@ -51,20 +51,6 @@ function variantLink(props) {
 }
 
 const Button = {
-  sizes: {
-    lg: {
-      fontSize: "md",
-      h: "60px",
-    },
-    md: {
-      fontSize: "xs",
-      h: "40px",
-    },
-    sm: {
-      fontSize: "2xs",
-      h: "30px",
-    },
-  },
   variants: {
     ghost: variantGhost,
     outline: variantOutline,
