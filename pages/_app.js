@@ -32,7 +32,7 @@ export default function App(props) {
         rtl={true}
         style={{ margin: "10px", maxWidth: "300px" }}
       />
-      <ChakraProvider resetCSS theme={theme()}>
+      <ChakraProvider resetCSS theme={theme}>
         <RtlProvider>{getLayout(<Component {...pageProps} />)}</RtlProvider>
       </ChakraProvider>
     </QueryClientProvider>
