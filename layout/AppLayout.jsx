@@ -18,14 +18,14 @@ function AppLayout({ showSearch, children }) {
   const { colorMode, toggleColorMode } = useColorMode();
   const isDark = colorMode === "dark";
   return (
-    <Box
-      px={12}
-      py={3}
-      height="100px"
-      borderBottom="1px solid"
-      borderColor="layout"
-    >
-      <Flex justify="space-between" align="center">
+    <Box px={12} py={3}>
+      <Flex
+        justify="space-between"
+        align="center"
+        height="100px"
+        borderBottom="1px solid"
+        borderColor="layout"
+      >
         <Image
           src="/images/logo.png"
           width={150}
