@@ -48,7 +48,6 @@ const CustomTable = ({ columns, data, isLoading }) => {
                   sx={{
                     textAlign: "center",
                     fontSize: "xs",
-                    whiteSpace: "nowrap",
                     border: "none",
                     display: "flex",
                     alignItems: "center",

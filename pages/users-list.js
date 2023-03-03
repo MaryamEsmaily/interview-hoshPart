@@ -23,6 +23,7 @@ function UsersListPage() {
           const age = new Date().getFullYear() - +year;
           return <Text>{age}</Text>;
         },
+        width: 40,
       },
       {
         Header: "شماره تلفن",
@@ -31,6 +32,7 @@ function UsersListPage() {
       {
         Header: "ایمیل",
         accessor: "email",
+        width: 250,
       },
       {
         Header: "آدرس",
@@ -39,6 +41,7 @@ function UsersListPage() {
       {
         Header: "شرکت",
         accessor: "company",
+        width: 220,
       },
     ],
     []
