@@ -14,4 +14,10 @@ const usePostUser = () => {
   });
 };
 
-export { useGetUsers, usePostUser };
+const useGetUser = (params) => {
+  return useQuery(["getUser", params], apiUsers.getUser, {
+    enabled: !!params,
+  });
+};
+
+export { useGetUsers, usePostUser, useGetUser };

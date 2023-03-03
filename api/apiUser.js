@@ -13,4 +13,10 @@ const postUser = async (params) => {
   return data;
 };
 
-export { getUsers, postUser };
+const getUser = async ({ queryKey }) => {
+  const params = queryKey[1];
+  const { data } = await instance.get(`${BASE_URL}/${params}`);
+  return data;
+};
+
+export { getUsers, postUser, getUser };

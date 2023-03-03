@@ -1,6 +1,7 @@
 import CloseIcon from "@/components/icon/CloseIcon";
-import { usePostUser } from "@/hook/api/useUsersApi";
-import getBase64Format from "@/utils/getBase64Format";
+import { useGetUser } from "@/hook/api/useUsersApi";
+import AppLayout from "@/layout/AppLayout";
+import getInitialValuesFormik from "@/utils/getInitialValuesFormik";
 import {
   Box,
   Button,
@@ -9,16 +10,13 @@ import {
   FormLabel,
   IconButton,
   Input,
-  ModalBody,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
   Stack,
+  Text,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import Image from "next/image";
-import React, { useRef } from "react";
-import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+import React, { useMemo, useRef } from "react";
 
 const initialValues = {
   avatar: "",
@@ -33,57 +31,66 @@ const initialValues = {
   zipcode: "",
 };
 
-function AddUserModal({ onClose }) {
+function EditUserPage() {
   //
   const refInputUpload = useRef();
   //
-  const postUser = usePostUser();
+  const { query } = useRouter();
+  const { id } = query;
+  //
+  const { data } = useGetUser(id);
   //
   const handleSubmit = (values) => {
-    postUser.mutate(
-      { ...values, avatar: values.avatar.split(",")?.[1] },
-      {
-        onSuccess: (res) => {
-          toast.success("با موفقیت اضافه شد");
-          onClose();
-        },
-        onError: (err) => {
-          toast.error("خطایی رخ داده است");
-        },
-      }
-    );
+    // postUser.mutate(
+    //   { ...values, avatar: values.avatar.split(",")?.[1] },
+    //   {
+    //     onSuccess: (res) => {
+    //       toast.success("با موفقیت اضافه شد");
+    //       onClose();
+    //     },
+    //     onError: (err) => {
+    //       toast.error("خطایی رخ داده است");
+    //     },
+    //   }
+    // );
   };
   //
+  const memoizedInitialValues = useMemo(
+    () =>
+      getInitialValuesFormik({
+        data: data,
+        initialValues,
+      }),
+    [data]
+  );
+  //
   const formik = useFormik({
-    initialValues: initialValues,
     onSubmit: handleSubmit,
+    initialValues: memoizedInitialValues,
+    enableReinitialize: true,
   });
-
+  //
   return (
     <>
-      <ModalOverlay bg="blackAlpha.100" backdropFilter="blur(4px) " />
-      <ModalContent bg="layout-deep" p={4} pt={1}>
-        <Stack
-          direction="row"
-          align="center"
-          borderBottom="1px solid"
-          borderColor="layout"
+      <Text mt={6}>لیست کاربران</Text>
+      <Flex as="form" width="100%" align="center" justify="center">
+        <Box
+          w="100%"
+          maxW="450px"
+          boxShadow="2xl"
+          shadow="red"
+          sx={{ boxShadow: "24px 24px 96px 0px #0C132C" }}
+          p={8}
         >
-          <IconButton
-            onClick={() => {
-              onClose();
-              formik.resetForm();
-            }}
-            variant="ghost"
-            icon={<CloseIcon color="primary-text" />}
-          />
-          <ModalHeader ps={0} whiteSpace="nowrap">
-            کاربر جدید
-          </ModalHeader>
-        </Stack>
-
-        <ModalBody as="form" onSubmit={formik.handleSubmit}>
-          <Flex justify="center" my={4}>
+          <Text
+            fontSize="lg"
+            borderBottom="1px solid"
+            borderColor="layout"
+            pb={4}
+          >
+            ویرایش کاربر
+          </Text>
+          <Flex justify="center" my={6}>
             {!formik.values.avatar ? (
               <>
                 <Box
@@ -141,14 +148,14 @@ function AddUserModal({ onClose }) {
               </Box>
             )}
           </Flex>
-          <Stack spacing={5}>
+          <Stack spacing={8} onSubmit={formik.handleSubmit}>
             <Stack direction="row">
               <FormControl>
                 <FormLabel fontSize="xs">نام کاربر</FormLabel>
                 <Input
                   _placeholder={{ fontSize: "xs" }}
                   borderRadius="lg"
-                  placeholder="نام کاربر جدید را وارد کنید"
+                  placeholder="نام کاربر  را وارد کنید"
                   {...formik.getFieldProps("name")}
                 />
               </FormControl>
@@ -156,7 +163,7 @@ function AddUserModal({ onClose }) {
                 <FormLabel fontSize="xs">سن</FormLabel>
                 <Input
                   _placeholder={{ fontSize: "xs" }}
-                  placeholder="سن کاربر جدید را وارد کنید"
+                  placeholder="سن کاربر  را وارد کنید"
                   borderRadius="lg"
                   {...formik.getFieldProps("dateOfBirth")}
                 />
@@ -168,7 +175,7 @@ function AddUserModal({ onClose }) {
                 <Input
                   _placeholder={{ fontSize: "xs" }}
                   borderRadius="lg"
-                  placeholder="ایمیل کاربر جدید را وارد کنید"
+                  placeholder="ایمیل کاربر  را وارد کنید"
                   {...formik.getFieldProps("email")}
                 />
               </FormControl>
@@ -177,7 +184,7 @@ function AddUserModal({ onClose }) {
 
                 <Input
                   _placeholder={{ fontSize: "xs" }}
-                  placeholder="شماره کاربر جدید را وارد کنید"
+                  placeholder="شماره کاربر  را وارد کنید"
                   borderRadius="lg"
                   {...formik.getFieldProps("phoneNumber")}
                 />
@@ -222,36 +229,34 @@ function AddUserModal({ onClose }) {
               </FormControl>
             </Stack>
             <FormControl>
-              <FormLabel fontSize="xs">شرکت</FormLabel>
+              <FormLabel fontSize="xs"> شرکت</FormLabel>
               <Input
                 _placeholder={{ fontSize: "xs" }}
-                placeholder="نام شرکت کاربر جدید را وارد کنید"
+                placeholder="نام شرکت کاربر را وارد کنید"
                 borderRadius="lg"
                 {...formik.getFieldProps("company")}
               />
             </FormControl>
             <Stack direction="row">
+              <Button type="submit" rounded="xl" width="full" me={1}>
+                ویرایش
+              </Button>
               <Button
                 rounded="xl"
                 width="full"
-                variant="outline"
-                me={1}
-                onClick={() => {
-                  onClose();
-                  formik.resetForm();
-                }}
+                colorScheme="red"
+                onClick={() => {}}
               >
-                لغو
-              </Button>
-              <Button rounded="xl" width="full" type="submit">
-                تایید
+                حذف
               </Button>
             </Stack>
           </Stack>
-        </ModalBody>
-      </ModalContent>
+        </Box>
+      </Flex>
     </>
   );
 }
 
-export default AddUserModal;
+EditUserPage.getLayout = (page) => <AppLayout>{page}</AppLayout>;
+
+export default EditUserPage;
