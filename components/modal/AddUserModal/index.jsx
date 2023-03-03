@@ -47,7 +47,7 @@ function AddUserModal({ onClose }) {
       onSuccess: (res) => {
         toast.success("با موفقیت اضافه شد");
         onClose();
-        push(`/edit-user/${res.id}`);
+        push(`/users/${res.id}`);
       },
       onError: (err) => {
         toast.error("خطایی رخ داده است");

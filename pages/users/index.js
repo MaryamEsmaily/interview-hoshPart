@@ -1,10 +1,14 @@
 import CustomTable from "@/components/custom/Table";
+import LeftArrowIcon from "@/components/icon/LeftArrowIcon";
 import AddUserModal from "@/components/modal/AddUserModal";
 import { useGetUsers } from "@/hook/api/useUsersApi";
 import AppLayout from "@/layout/AppLayout";
 import matchSorter from "@/utils/matchSorter";
 import {
   Box,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
   Button,
   Modal,
   Stack,
@@ -47,7 +51,7 @@ function UsersListPage() {
         Cell: ({ value, row }) => {
           return (
             <Text
-              onClick={() => push(`/edit-user/${row.original.id}`)}
+              onClick={() => push(`/users/${row.original.id}`)}
               cursor="pointer"
               _hover={{ textDecoration: "underline" }}
             >
@@ -103,7 +107,14 @@ function UsersListPage() {
       </Modal>
       <Box mt={10}>
         <Stack direction="row" align="center" justifyContent="space-between">
-          <Text>لیست کاربران</Text>
+          <Breadcrumb spacing="8px" separator={<LeftArrowIcon fontSize="xs" />}>
+            <BreadcrumbItem isCurrentPage>
+              <BreadcrumbLink href="/users">
+                <LeftArrowIcon fontSize="xs" mt={2} me={1} />
+                لیست کاربران
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+          </Breadcrumb>
           <Button onClick={onOpen}>کاربر جدید</Button>
         </Stack>
         <CustomTable columns={columns} data={data} />

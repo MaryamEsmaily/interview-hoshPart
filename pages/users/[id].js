@@ -1,10 +1,14 @@
 import CloseIcon from "@/components/icon/CloseIcon";
+import LeftArrowIcon from "@/components/icon/LeftArrowIcon";
 import { useDeleteUser, useGetUser, usePutUser } from "@/hook/api/useUsersApi";
 import AppLayout from "@/layout/AppLayout";
 import getBase64Format from "@/utils/getBase64Format";
 import getInitialValuesFormik from "@/utils/getInitialValuesFormik";
 import {
   Box,
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
   Button,
   Flex,
   FormControl,
@@ -49,7 +53,7 @@ function EditUserPage() {
     deleteUser.mutate(id, {
       onSuccess: (res) => {
         toast.success("با موفقیت حذف شد");
-        push("/users-list");
+        push("/users");
       },
       onError: (err) => {
         toast.error("خطایی رخ داده است");
@@ -88,7 +92,20 @@ function EditUserPage() {
   //
   return (
     <>
-      <Text mt={6}>لیست کاربران</Text>
+      <Breadcrumb
+        mt={6}
+        separator={<LeftArrowIcon fontSize="xs" color="#7E848E" mt={2} />}
+      >
+        <BreadcrumbItem>
+          <BreadcrumbLink color="#7E848E" href="/users">
+            <LeftArrowIcon fontSize="xs" mt={2} me={1} />
+            لیست کاربران
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbItem isCurrentPage>
+          <BreadcrumbLink color="">ویرایش کاربر</BreadcrumbLink>
+        </BreadcrumbItem>
+      </Breadcrumb>
       <Flex
         as="form"
         onSubmit={formik.handleSubmit}
@@ -97,6 +114,7 @@ function EditUserPage() {
         justify="center"
       >
         <Box
+          rounded="xl"
           w="100%"
           maxW="450px"
           boxShadow="2xl"
