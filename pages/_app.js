@@ -8,6 +8,8 @@ import "@/styles/globals.css";
 import { ChakraProvider } from "@chakra-ui/react";
 import { RtlProvider } from "@/provider/RtlProvider";
 import theme from "@/theme/theme";
+import { Provider } from "react-redux";
+import { store } from "@/store/store";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,22 +21,24 @@ export default function App(props) {
   const { Component, pageProps } = props;
   const getLayout = Component.getLayout || ((page) => page);
   return (
-    <QueryClientProvider client={queryClient}>
-      <ToastContainer
-        position="bottom-left"
-        autoClose={6000}
-        closeOnClick
-        newestOnTop={false}
-        pauseOnHover
-        limit={5}
-        icon={false}
-        theme="colored"
-        rtl={true}
-        style={{ margin: "10px", maxWidth: "300px" }}
-      />
-      <ChakraProvider resetCSS theme={theme}>
-        <RtlProvider>{getLayout(<Component {...pageProps} />)}</RtlProvider>
-      </ChakraProvider>
-    </QueryClientProvider>
+    <Provider store={store}>
+      <QueryClientProvider client={queryClient}>
+        <ToastContainer
+          position="bottom-left"
+          autoClose={6000}
+          closeOnClick
+          newestOnTop={false}
+          pauseOnHover
+          limit={5}
+          icon={false}
+          theme="colored"
+          rtl={true}
+          style={{ margin: "10px", maxWidth: "300px" }}
+        />
+        <ChakraProvider resetCSS theme={theme}>
+          <RtlProvider>{getLayout(<Component {...pageProps} />)}</RtlProvider>
+        </ChakraProvider>
+      </QueryClientProvider>
+    </Provider>
   );
 }

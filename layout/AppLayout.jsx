@@ -1,6 +1,7 @@
 import MoonIcon from "@/components/icon/MoonIcon";
 import SearchIcon from "@/components/icon/SearchIcon";
 import SunIcon from "@/components/icon/SunIcon";
+import { setSearchValue } from "@/store/slices/searchSlice";
 import {
   Box,
   Flex,
@@ -13,10 +14,15 @@ import {
 } from "@chakra-ui/react";
 import Image from "next/image";
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 function AppLayout({ showSearch, children }) {
   const { colorMode, toggleColorMode } = useColorMode();
   const isDark = colorMode === "dark";
+  //
+  const searchValue = useSelector((state) => state.search.searchValue);
+  const dispatch = useDispatch();
+  //
   return (
     <Box px={12} py={3}>
       <Flex
@@ -36,11 +42,12 @@ function AppLayout({ showSearch, children }) {
           {showSearch ? (
             <InputGroup>
               <Input
-                type="number"
                 rounded="xl"
                 placeholder="جستجو"
                 bg="layout"
                 border="none"
+                value={searchValue}
+                onChange={(e) => dispatch(setSearchValue(e.target.value))}
               />
               <InputLeftElement
                 sx={{

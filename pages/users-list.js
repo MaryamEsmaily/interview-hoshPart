@@ -2,6 +2,7 @@ import CustomTable from "@/components/custom/Table";
 import AddUserModal from "@/components/modal/AddUserModal";
 import { useGetUsers } from "@/hook/api/useUsersApi";
 import AppLayout from "@/layout/AppLayout";
+import matchSorter from "@/utils/matchSorter";
 import {
   Box,
   Button,
@@ -12,16 +13,31 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useMemo } from "react";
+import { useSelector } from "react-redux";
 
 function UsersListPage() {
   //
   const { push } = useRouter();
   //
+  const searchValue = useSelector((state) => state.search.searchValue);
+  //
   const { isOpen, onOpen, onClose } = useDisclosure();
   //
   const { data: users } = useGetUsers();
   //
-  const data = useMemo(() => users ?? [], [users]);
+  const data = useMemo(() => {
+    const list = users ?? [];
+    if (!searchValue) return list;
+    return matchSorter(list, searchValue, [
+      "name",
+      "phoneNumber",
+      "email",
+      "street",
+      "company",
+      "country",
+      "city",
+    ]);
+  }, [users, searchValue]);
   //
   const columns = useMemo(
     () => [
@@ -62,6 +78,14 @@ function UsersListPage() {
       {
         Header: "آدرس",
         accessor: "street",
+        Cell: ({ value, row }) => {
+          return (
+            <Text whiteSpace="break-spaces">
+              {value},{row.original.city},{row.original.country}
+            </Text>
+          );
+        },
+        width: 250,
       },
       {
         Header: "شرکت",
