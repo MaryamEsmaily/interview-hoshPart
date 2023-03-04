@@ -3,7 +3,6 @@ import LeftArrowIcon from "@/components/icon/LeftArrowIcon";
 import AddUserModal from "@/components/modal/AddUserModal";
 import { useGetUsers } from "@/hook/api/useUsersApi";
 import AppLayout from "@/layout/AppLayout";
-import matchSorter from "@/utils/matchSorter";
 import {
   Box,
   Breadcrumb,
@@ -15,6 +14,7 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
+import { matchSorter } from "match-sorter";
 import { useRouter } from "next/router";
 import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
@@ -32,15 +32,17 @@ function UsersListPage() {
   const data = useMemo(() => {
     const list = users ?? [];
     if (!searchValue) return list;
-    return matchSorter(list, searchValue, [
-      "name",
-      "phoneNumber",
-      "email",
-      "street",
-      "company",
-      "country",
-      "city",
-    ]);
+    return matchSorter(list, searchValue, {
+      keys: [
+        "name",
+        "phoneNumber",
+        "email",
+        "street",
+        "company",
+        "country",
+        "city",
+      ],
+    });
   }, [users, searchValue]);
   //
   const columns = useMemo(
