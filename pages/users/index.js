@@ -66,7 +66,7 @@ function UsersListPage() {
         Cell: ({ value }) => {
           const year = typeof value === "string" ? value?.split("-")?.[0] : "-";
           const age = new Date().getFullYear() - +year;
-          return <Text>{age}</Text>;
+          return <Text>{isNaN(age) ? "N/A" : age}</Text>;
         },
         width: 40,
       },

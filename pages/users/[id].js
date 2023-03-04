@@ -1,3 +1,4 @@
+import Datepicker from "@/components/custom/DatePicker";
 import CloseIcon from "@/components/icon/CloseIcon";
 import LeftArrowIcon from "@/components/icon/LeftArrowIcon";
 import { useDeleteUser, useGetUser, usePutUser } from "@/hook/api/useUsersApi";
@@ -30,7 +31,7 @@ const initialValues = {
   city: "",
   company: "",
   country: "",
-  dateOfBirth: "",
+  dateOfBirth: null,
   email: "",
   name: "",
   phoneNumber: "",
@@ -90,6 +91,8 @@ function EditUserPage() {
     enableReinitialize: true,
   });
   //
+  console.log(formik.values.dateOfBirth);
+
   return (
     <>
       <Breadcrumb
@@ -201,11 +204,10 @@ function EditUserPage() {
               </FormControl>
               <FormControl>
                 <FormLabel fontSize="xs">سن</FormLabel>
-                <Input
-                  _placeholder={{ fontSize: "xs" }}
-                  placeholder="سن کاربر  را وارد کنید"
-                  borderRadius="lg"
-                  {...formik.getFieldProps("dateOfBirth")}
+                <Datepicker
+                  name="dateOfBirth"
+                  value={formik.values.dateOfBirth}
+                  onChange={formik.handleChange}
                 />
               </FormControl>
             </Stack>

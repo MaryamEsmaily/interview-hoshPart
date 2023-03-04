@@ -1,3 +1,4 @@
+import DatePicker from "@/components/custom/DatePicker";
 import CloseIcon from "@/components/icon/CloseIcon";
 import { usePostUser } from "@/hook/api/useUsersApi";
 import getBase64Format from "@/utils/getBase64Format";
@@ -155,11 +156,10 @@ function AddUserModal({ onClose }) {
               </FormControl>
               <FormControl>
                 <FormLabel fontSize="xs">سن</FormLabel>
-                <Input
-                  _placeholder={{ fontSize: "xs" }}
-                  placeholder="سن کاربر جدید را وارد کنید"
-                  borderRadius="lg"
-                  {...formik.getFieldProps("dateOfBirth")}
+                <DatePicker
+                  name="dateOfBirth"
+                  value={formik.values.dateOfBirth}
+                  onChange={formik.handleChange}
                 />
               </FormControl>
             </Stack>
